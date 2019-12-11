@@ -1,6 +1,6 @@
 /* eslint-disable no-loop-func */
-import React, { Component } from "react";
-import LoadingOverlay from "react-loading-overlay";
+import React, { Component } from 'react';
+import LoadingOverlay from 'react-loading-overlay';
 import {
   Button,
   Card,
@@ -14,22 +14,20 @@ import {
   Input,
   Label,
   Row
-} from "reactstrap";
-import { storage, database } from "../../helpers/Firebase";
-import firebase from "../../helpers/Firebase";
+} from 'reactstrap';
 
 class Projects extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      projectName: "",
-      projectType: "",
-      projectLink: "",
-      projectCSS: "",
-      theme: "dark-theme",
-      author: "",
-      description: "",
+      projectName: '',
+      projectType: '',
+      projectLink: '',
+      projectCSS: '',
+      theme: 'dark-theme',
+      author: '',
+      description: '',
       imageFiles: [],
       imageURLs: [],
       loading: false,
@@ -45,15 +43,7 @@ class Projects extends Component {
     this.onAuthListener();
   }
 
-  onAuthListener() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log("Signed In");
-      } else {
-        console.log("Not signed in");
-      }
-    });
-  }
+  onAuthListener() {}
 
   onChangeHandler(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -70,62 +60,9 @@ class Projects extends Component {
     //   author,
     //   description
     // } = this.state;
-
-    let { imageFiles, imageURLs } = this.state;
-    for (let i = 0; i < imageFiles.length; i++) {
-      this.setState({ loading: true });
-      const uploadImage = storage
-        .ref(`images/${imageFiles[i].name}`)
-        .put(imageFiles[i]);
-
-      uploadImage.on(
-        "state_changed",
-        () => {
-          // console.log(snapshot);
-        },
-        error => {
-          console.log(error);
-        },
-        async () => {
-          const imageURL = await storage
-            .ref("images")
-            .child(imageFiles[i].name)
-            .getDownloadURL();
-
-          imageURLs.push(imageURL);
-
-          if (i === imageFiles.length - 1) {
-            this.setState({ imageURLs: imageURLs, loading: false });
-
-            const projectData = {
-              projectName: this.state.projectName,
-              projectType: this.state.projectType,
-              projectLink: this.state.projectLink,
-              projectCSS: this.state.projectCSS,
-              theme: this.state.theme,
-              author: this.state.author,
-              description: this.state.description,
-              imageURLs: this.state.imageURLs
-            };
-
-            database.ref("information").push(projectData);
-
-            this.setState({ imageURLs: [] });
-          }
-        }
-      );
-    }
   };
 
-  onImageUpload(e) {
-    if (e.target.files.length) {
-      const imageFiles = e.target.files;
-
-      console.log("FILES");
-      console.log(imageFiles);
-      this.setState({ imageFiles });
-    }
-  }
+  onImageUpload(e) {}
 
   render() {
     return (
@@ -139,14 +76,14 @@ class Projects extends Component {
               styles={{
                 overlay: base => ({
                   ...base,
-                  background: "rgba(255, 255, 255, 0.5)",
-                  color: "black"
+                  background: 'rgba(255, 255, 255, 0.5)',
+                  color: 'black'
                 }),
                 spinner: base => ({
                   ...base,
-                  width: "100px",
-                  "& svg circle": {
-                    stroke: "rgba(255, 0, 0, 0.5)"
+                  width: '100px',
+                  '& svg circle': {
+                    stroke: 'rgba(255, 0, 0, 0.5)'
                   }
                 })
               }}

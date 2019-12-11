@@ -10,8 +10,6 @@ import {
 } from '@coreui/react';
 // routes config
 import routes from '../../routes';
-import firebase from '../../helpers/Firebase';
-import { sign } from 'crypto';
 
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
