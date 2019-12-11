@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import LoadingOverlay from "react-loading-overlay";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import LoadingOverlay from 'react-loading-overlay';
 import {
   Button,
   Card,
@@ -15,14 +15,14 @@ import {
   InputGroupText,
   Row,
   Alert
-} from "reactstrap";
+} from 'reactstrap';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       loading: false,
       response: null
     };
@@ -32,10 +32,11 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    const token = JSON.parse(localStorage.getItem("token"));
+    console.log('login');
+    const token = JSON.parse(localStorage.getItem('token'));
 
     if (token) {
-      this.props.history.push("/");
+      this.props.history.push('/');
     }
   }
 
@@ -54,9 +55,9 @@ class Login extends Component {
 
   login = async (email, password) => {
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ email, password })
     };
@@ -71,8 +72,8 @@ class Login extends Component {
       if (userData.token) {
         console.log(userData);
         // localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", JSON.stringify(userData.token));
-        this.props.history.push("/");
+        localStorage.setItem('token', JSON.stringify(userData.token));
+        this.props.history.push('/');
       }
 
       console.log(userData);
@@ -118,14 +119,14 @@ class Login extends Component {
                       styles={{
                         overlay: base => ({
                           ...base,
-                          background: "rgba(255, 255, 255, 0.5)",
-                          color: "black"
+                          background: 'rgba(255, 255, 255, 0.5)',
+                          color: 'black'
                         }),
                         spinner: base => ({
                           ...base,
-                          width: "100px",
-                          "& svg circle": {
-                            stroke: "rgba(255, 0, 0, 0.5)"
+                          width: '100px',
+                          '& svg circle': {
+                            stroke: 'rgba(255, 0, 0, 0.5)'
                           }
                         })
                       }}
@@ -172,7 +173,7 @@ class Login extends Component {
                         >
                           {this.state.response
                             ? this.state.response.message
-                            : "hidden"}
+                            : 'hidden'}
                         </Alert>
                         <Row>
                           <Col xs="6">
@@ -196,7 +197,7 @@ class Login extends Component {
                 </Card>
                 <Card
                   className="text-white bg-primary py-5 d-md-down-none"
-                  style={{ width: "44%" }}
+                  style={{ width: '44%' }}
                 >
                   <CardBody className="text-center">
                     <div>
