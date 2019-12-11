@@ -1,20 +1,20 @@
-import React, { Component, Suspense } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import * as router from "react-router-dom";
-import { Container } from "reactstrap";
+import React, { Component, Suspense } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import * as router from 'react-router-dom';
+import { Container } from 'reactstrap';
 
 import {
   AppFooter,
   AppHeader,
   AppBreadcrumb2 as AppBreadcrumb
-} from "@coreui/react";
+} from '@coreui/react';
 // routes config
-import routes from "../../routes";
-import firebase from "../../helpers/Firebase";
-import { sign } from "crypto";
+import routes from '../../routes';
+import firebase from '../../helpers/Firebase';
+import { sign } from 'crypto';
 
-const DefaultFooter = React.lazy(() => import("./DefaultFooter"));
-const DefaultHeader = React.lazy(() => import("./DefaultHeader"));
+const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
+const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class DefaultLayout extends Component {
 
   componentDidMount = async () => {
     // const token = localStorage.removeItem("token");
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem('token'));
     console.log(token);
 
     if (token) {
@@ -38,21 +38,21 @@ class DefaultLayout extends Component {
 
       console.log(data);
     } else {
-      this.props.history.push("/login");
+      this.props.history.push('/login');
     }
   };
 
   getUsers = async () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${this.state.token}`
       }
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me',
         requestOptions
       );
 
@@ -82,8 +82,8 @@ class DefaultLayout extends Component {
   );
 
   signOut(e) {
-    localStorage.removeItem("token");
-    this.props.history.push("/login");
+    localStorage.removeItem('token');
+    this.props.history.push('/login');
   }
 
   render() {
@@ -111,7 +111,7 @@ class DefaultLayout extends Component {
                       />
                     ) : null;
                   })}
-                  <Redirect from="/" to="/projects" />
+                  <Redirect from="/" to="/users" />
                 </Switch>
               </Suspense>
             </Container>
