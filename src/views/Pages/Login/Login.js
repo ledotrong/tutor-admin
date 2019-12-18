@@ -32,7 +32,6 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    console.log('login');
     const token = JSON.parse(localStorage.getItem('token'));
 
     if (token) {
@@ -47,9 +46,6 @@ class Login extends Component {
   onSubmitHandler = async e => {
     e.preventDefault();
     this.setState({ loading: true });
-
-    console.log(this.state);
-
     this.login(this.state.email, this.state.password);
   };
 
@@ -70,13 +66,10 @@ class Login extends Component {
       const userData = await this.handleResponse(response);
 
       if (userData.token) {
-        console.log(userData);
         // localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem('token', JSON.stringify(userData.token));
         this.props.history.push('/');
       }
-
-      console.log(userData);
 
       this.setState({ loading: false, response: userData });
 

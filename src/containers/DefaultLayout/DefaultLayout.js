@@ -26,15 +26,11 @@ class DefaultLayout extends Component {
   componentDidMount = async () => {
     // const token = localStorage.removeItem("token");
     const token = JSON.parse(localStorage.getItem('token'));
-    console.log(token);
 
     if (token) {
-      console.log(token);
       this.setState({ token });
 
       const data = await this.getUsers();
-
-      console.log(data);
     } else {
       this.props.history.push('/login');
     }

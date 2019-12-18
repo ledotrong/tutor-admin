@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Card, Badge, CardBody, CardHeader, Col, Row, Table } from "reactstrap";
-import LoadingOverlay from "react-loading-overlay";
+import React, { Component } from 'react';
+import { Card, Badge, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import LoadingOverlay from 'react-loading-overlay';
 
 class User extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class User extends Component {
   }
 
   componentDidMount = async () => {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem('token'));
     if (token) this.setState({ token });
     const userData = await this.getUsers(token);
     let user = null;
@@ -27,14 +27,14 @@ class User extends Component {
       );
 
       if (user) {
-        if (user.status === "banned") banAction = true;
+        if (user.status === 'banned') banAction = true;
         user.picture = (
           <img
             src={user.picture}
             style={{
               height: 250,
               width: 250,
-              objectFit: "cover",
+              objectFit: 'cover',
               borderRadius: 125
             }}
             alt="profile"
@@ -44,8 +44,9 @@ class User extends Component {
           <Badge color={this.getBadge(user.status)}>{user.status}</Badge>
         );
         user.date = new Date(user.date).toLocaleString();
-        user.address = Object.values(user.address).join(", ");
-        user.skills = Object.values(user.skills).join(", ");
+        user.address = Object.values(user.address).join(', ');
+        user.skills = Object.values(user.skills).join(', ');
+        user.wages = user.wages + ' VND/night';
       }
 
       this.setState({ user: user, banAction });
@@ -53,28 +54,28 @@ class User extends Component {
   };
 
   getBadge = status => {
-    return status === "active"
-      ? "success"
-      : status === "inactive"
-      ? "secondary"
-      : status === "pending"
-      ? "warning"
-      : status === "banned"
-      ? "danger"
-      : "primary";
+    return status === 'active'
+      ? 'success'
+      : status === 'inactive'
+      ? 'secondary'
+      : status === 'pending'
+      ? 'warning'
+      : status === 'banned'
+      ? 'danger'
+      : 'primary';
   };
 
   getUsers = async token => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/users",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/users',
         requestOptions
       );
 
@@ -108,9 +109,9 @@ class User extends Component {
   banUserAction = async () => {
     this.setState({ loading: true });
     const requestOptions = {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${this.state.token}`
       }
     };
@@ -133,19 +134,19 @@ class User extends Component {
   render() {
     let user = this.state.user;
     if (!user) {
-      user = { id: "Not found" };
+      user = { id: 'Not found' };
     }
 
     const details = [
-      ["Name", user.name],
-      ["Email", user.email],
-      ["Address", user.address],
-      ["Role", user.role],
-      ["Skills", user.skills],
-      ["Date registered", user.date],
-      ["Wages", user.wages],
-      ["Status", user.status],
-      ["Introduction", user.introduction]
+      ['Name', user.name],
+      ['Email', user.email],
+      ['Address', user.address],
+      ['Role', user.role],
+      ['Skills', user.skills],
+      ['Date registered', user.date],
+      ['Wages', user.wages],
+      ['Status', user.status],
+      ['Introduction', user.introduction]
     ];
 
     return (
@@ -157,14 +158,14 @@ class User extends Component {
           styles={{
             overlay: base => ({
               ...base,
-              background: "rgba(255, 255, 255, 0.5)",
-              color: "black"
+              background: 'rgba(255, 255, 255, 0.5)',
+              color: 'black'
             }),
             spinner: base => ({
               ...base,
-              width: "100px",
-              "& svg circle": {
-                stroke: "rgba(255, 0, 0, 0.5)"
+              width: '100px',
+              '& svg circle': {
+                stroke: 'rgba(255, 0, 0, 0.5)'
               }
             })
           }}
@@ -174,7 +175,7 @@ class User extends Component {
               <Card>
                 <CardHeader className="bg-dark">
                   <strong>
-                    <i className="icon-info pr-1"></i>User id:{" "}
+                    <i className="icon-info pr-1"></i>User id:{' '}
                     {this.props.match.params.id}
                   </strong>
                 </CardHeader>
@@ -182,7 +183,9 @@ class User extends Component {
                   <Row>
                     <Col lg={3} className=" mt-4">
                       <Row className="justify-content-center font-weight-bold mb-3">
-                        <h2 className="text-uppercase">{user.name}</h2>
+                        <h2 className="text-uppercase name-font">
+                          {user.name}
+                        </h2>
                       </Row>
                       <Row className="justify-content-center">
                         {user.picture}
@@ -212,9 +215,9 @@ class User extends Component {
                         <tbody>
                           {details.map(([key, value]) => {
                             if (
-                              key !== "_id" &&
-                              key !== "googleProvider" &&
-                              key !== "facebookProvider"
+                              key !== '_id' &&
+                              key !== 'googleProvider' &&
+                              key !== 'facebookProvider'
                             )
                               return (
                                 <tr key={key}>
@@ -232,10 +235,10 @@ class User extends Component {
                           onClick={() => this.banUserAction()}
                           type="button"
                           className={`btn ${
-                            this.state.banAction ? "btn-success" : "btn-danger"
+                            this.state.banAction ? 'btn-success' : 'btn-danger'
                           }`}
                         >
-                          {this.state.banAction ? "Unban" : "Ban"}
+                          {this.state.banAction ? 'Unban' : 'Ban'}
                         </button>
                       </Row>
                     </Col>

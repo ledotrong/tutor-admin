@@ -1,9 +1,14 @@
+@import '~antd/dist/antd.css';
+
 .action-group {
   text-align: center;
 }
 
 .google-font {
-  font-family: "Varela Round", sans-serif;
+  font-family: 'Nunito', sans-serif;
+}
+
+.name-font {
 }
 
 .user-card {
