@@ -121,7 +121,6 @@ function (_React$Component) {
             return _this2.props.onSearchChanged(event.target.value);
           },
           placeholder: localization.searchPlaceholder,
-          color: "inherit",
           InputProps: {
             startAdornment: React.createElement(_InputAdornment["default"], {
               position: "start"

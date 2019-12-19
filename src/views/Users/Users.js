@@ -1,8 +1,11 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { MDBDataTable } from "mdbreact";
-import { Badge, Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import LoadingOverlay from "react-loading-overlay";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { MDBDataTable } from 'mdbreact';
+import { Badge, Card, CardBody, CardHeader, Col } from 'reactstrap';
+import LoadingOverlay from 'react-loading-overlay';
+import { Radio, Row, Typography } from 'antd';
+
+const { Text } = Typography;
 
 class Users extends Component {
   constructor(props) {
@@ -10,47 +13,49 @@ class Users extends Component {
     this.state = {
       loading: true,
       userData: [],
+      statusFilter: 'all',
+      roleFilter: 'all',
       columns: [
         {
-          label: "ID",
-          field: "_id",
-          sort: "asc",
+          label: 'ID',
+          field: '_id',
+          sort: 'asc',
           width: 50
         },
         {
-          label: "Name",
-          field: "name",
-          sort: "asc",
+          label: 'Name',
+          field: 'name',
+          sort: 'asc',
           width: 150
         },
         {
-          label: "Email",
-          field: "email",
-          sort: "asc",
+          label: 'Email',
+          field: 'email',
+          sort: 'asc',
           width: 150
         },
         {
-          label: "Registered",
-          field: "date",
-          sort: "asc",
+          label: 'Registered',
+          field: 'date',
+          sort: 'asc',
           width: 100
         },
         {
-          label: "Role",
-          field: "role",
-          sort: "asc",
+          label: 'Role',
+          field: 'role',
+          sort: 'asc',
           width: 100
         },
         {
-          label: "Status",
-          field: "status",
-          sort: "asc",
+          label: 'Status',
+          field: 'status',
+          sort: 'asc',
           width: 100
         },
         {
-          label: "Actions",
-          field: "actions",
-          sort: "asc",
+          label: 'Actions',
+          field: 'actions',
+          sort: 'asc',
           width: 150
         }
       ]
@@ -62,32 +67,42 @@ class Users extends Component {
   }
 
   getBadge = status => {
-    return status === "active"
-      ? "success"
-      : status === "inactive"
-      ? "secondary"
-      : status === "pending"
-      ? "warning"
-      : status === "banned"
-      ? "danger"
-      : "primary";
+    return status === 'active'
+      ? 'success'
+      : status === 'inactive'
+      ? 'secondary'
+      : status === 'pending'
+      ? 'warning'
+      : status === 'banned'
+      ? 'danger'
+      : 'primary';
   };
 
   getUsers = async () => {
+    this.setState({ loading: true });
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI1ZGU1ZTE1YjJkMDY1NjFkNDc2MjA0MmUiLCJyb2xlIjoibWFzdGVyIiwiaWF0IjoxNTc1ODgyNjc1fQ.gRjIyKO6wb0N5QVa5kHuXsWTF7c_GUmNsVkagvNsk2U`
       }
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/users",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/users',
         requestOptions
       );
 
       let userData = await this.handleResponse(response);
+
+      if (this.state.statusFilter !== 'all') {
+        userData = userData.filter(
+          data => data.status === this.state.statusFilter
+        );
+      }
+      if (this.state.roleFilter !== 'all') {
+        userData = userData.filter(data => data.role === this.state.roleFilter);
+      }
 
       userData.forEach((element, index) => {
         const userLink = `/users/${element._id}`;
@@ -137,6 +152,15 @@ class Users extends Component {
     });
   }
 
+  onChangeStatusFilter(e) {
+    this.setState({ statusFilter: e.target.value });
+    this.getUsers();
+  }
+  onChangeRoleFilter(e) {
+    this.setState({ roleFilter: e.target.value });
+    this.getUsers();
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -147,14 +171,14 @@ class Users extends Component {
           styles={{
             overlay: base => ({
               ...base,
-              background: "rgba(255, 255, 255, 0.5)",
-              color: "black"
+              background: 'rgba(255, 255, 255, 0.5)',
+              color: 'black'
             }),
             spinner: base => ({
               ...base,
-              width: "100px",
-              "& svg circle": {
-                stroke: "rgba(255, 0, 0, 0.5)"
+              width: '100px',
+              '& svg circle': {
+                stroke: 'rgba(255, 0, 0, 0.5)'
               }
             })
           }}
@@ -163,9 +187,35 @@ class Users extends Component {
             <Col xl={12}>
               <Card>
                 <CardHeader className="bg-dark">
-                  <i className="fa fa-align-justify"></i>Users{"  "}
+                  <i className="fa fa-align-justify"></i>Users{'  '}
                   <small className="text-muted">user database</small>
                 </CardHeader>
+                <Row className="mt-4 mr-4" type="flex" justify="end">
+                  <Radio.Group
+                    defaultValue="a"
+                    size="small"
+                    buttonStyle="solid"
+                    onChange={e => this.onChangeRoleFilter(e)}
+                    value={this.state.roleFilter}
+                    className="mr-4"
+                  >
+                    <Radio.Button value="all">All</Radio.Button>
+                    <Radio.Button value="student">Student</Radio.Button>
+                    <Radio.Button value="tutor">Tutor</Radio.Button>
+                  </Radio.Group>
+                  <Radio.Group
+                    defaultValue="a"
+                    size="small"
+                    buttonStyle="solid"
+                    onChange={e => this.onChangeStatusFilter(e)}
+                    value={this.state.statusFilter}
+                  >
+                    <Radio.Button value="all">All</Radio.Button>
+                    <Radio.Button value="active">Active</Radio.Button>
+                    <Radio.Button value="inactive">Inactive</Radio.Button>
+                    <Radio.Button value="banned">Banned</Radio.Button>
+                  </Radio.Group>
+                </Row>
                 <CardBody>
                   <MDBDataTable
                     responsive

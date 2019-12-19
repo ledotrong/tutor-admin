@@ -29,8 +29,15 @@ class DefaultLayout extends Component {
 
     if (token) {
       this.setState({ token });
+    } else {
+      this.props.history.push('/login');
+    }
+  };
 
-      const data = await this.getUsers();
+  componentDidUpdate = async () => {
+    if (this.state.token) {
+      const role = await this.getUsers();
+      localStorage.setItem('role', JSON.stringify(role));
     } else {
       this.props.history.push('/login');
     }
@@ -52,7 +59,7 @@ class DefaultLayout extends Component {
 
       let userData = await this.handleResponse(response);
 
-      return userData.access;
+      return userData.role;
     } catch (err) {
       return err;
     }

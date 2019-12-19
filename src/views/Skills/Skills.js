@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import LoadingOverlay from "react-loading-overlay";
-import { MDBDataTable, MDBTable } from "mdbreact";
+import React, { Component } from 'react';
+import LoadingOverlay from 'react-loading-overlay';
+import { MDBDataTable, MDBTable } from 'mdbreact';
 import {
   Card,
   CardBody,
@@ -16,7 +16,7 @@ import {
   Input,
   Alert,
   Form
-} from "reactstrap";
+} from 'reactstrap';
 
 class Skills extends Component {
   constructor(props) {
@@ -25,9 +25,9 @@ class Skills extends Component {
       deleteModal: false,
       editModal: false,
       addModal: false,
-      name: "",
-      link: "",
-      key: "",
+      name: '',
+      link: '',
+      key: '',
       skills: [],
       loading: true,
       currentItem: null,
@@ -45,7 +45,7 @@ class Skills extends Component {
   }
 
   componentDidMount() {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem('token'));
     if (token) this.setState({ token });
     this.getSkills();
   }
@@ -57,7 +57,7 @@ class Skills extends Component {
       element.isDeleted = element.isDeleted ? (
         <Badge color="danger">Deleted</Badge>
       ) : (
-        <Badge color="primary">Available</Badge>
+        <Badge color="success">Available</Badge>
       );
       element.actions = (
         <div className="float-right">
@@ -78,15 +78,15 @@ class Skills extends Component {
 
   getSkills = async () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI1ZGU1ZTE1YjJkMDY1NjFkNDc2MjA0MmUiLCJyb2xlIjoibWFzdGVyIiwiaWF0IjoxNTc1ODgyNjc1fQ.gRjIyKO6wb0N5QVa5kHuXsWTF7c_GUmNsVkagvNsk2U`
       }
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skills",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skills',
         requestOptions
       );
 
@@ -95,8 +95,6 @@ class Skills extends Component {
       this.setFormat(skills);
 
       this.setState({ loading: false, skills: skills });
-
-      console.log(skills);
     } catch (err) {
       console.log(err);
     }
@@ -150,16 +148,16 @@ class Skills extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${this.state.token}`
       },
       body: JSON.stringify({ name: this.state.name })
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skill",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skill',
         requestOptions
       );
 
@@ -186,9 +184,9 @@ class Skills extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     const requestOptions = {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${this.state.token}`
       },
       body: JSON.stringify({
@@ -198,7 +196,7 @@ class Skills extends Component {
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skill/update",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skill/update',
         requestOptions
       );
 
@@ -216,9 +214,9 @@ class Skills extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     const requestOptions = {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${this.state.token}`
       },
       body: JSON.stringify({
@@ -227,7 +225,7 @@ class Skills extends Component {
     };
     try {
       const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skill/delete",
+        'https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/skill/delete',
         requestOptions
       );
 
@@ -251,14 +249,14 @@ class Skills extends Component {
           styles={{
             overlay: base => ({
               ...base,
-              background: "rgba(255, 255, 255, 0.5)",
-              color: "black"
+              background: 'rgba(255, 255, 255, 0.5)',
+              color: 'black'
             }),
             spinner: base => ({
               ...base,
-              width: "100px",
-              "& svg circle": {
-                stroke: "rgba(255, 0, 0, 0.5)"
+              width: '100px',
+              '& svg circle': {
+                stroke: 'rgba(255, 0, 0, 0.5)'
               }
             })
           }}
@@ -286,27 +284,27 @@ class Skills extends Component {
                     data={{
                       columns: [
                         {
-                          label: "ID",
-                          field: "id",
-                          sort: "asc",
+                          label: 'ID',
+                          field: 'id',
+                          sort: 'asc',
                           width: 50
                         },
                         {
-                          label: "Name",
-                          field: "name",
-                          sort: "asc",
+                          label: 'Name',
+                          field: 'name',
+                          sort: 'asc',
                           width: 150
                         },
                         {
-                          label: "State",
-                          field: "isDeleted",
-                          sort: "asc",
+                          label: 'State',
+                          field: 'isDeleted',
+                          sort: 'asc',
                           width: 100
                         },
                         {
-                          label: "Actions",
-                          field: "actions",
-                          sort: "asc",
+                          label: 'Actions',
+                          field: 'actions',
+                          sort: 'asc',
                           width: 100
                         }
                       ],
@@ -320,7 +318,7 @@ class Skills extends Component {
           <Modal
             isOpen={this.state.addModal}
             toggleDelete={this.toggleAdd}
-            className={"modal-success "}
+            className={'modal-success '}
           >
             <ModalHeader>Add</ModalHeader>
             <ModalBody>
@@ -349,7 +347,7 @@ class Skills extends Component {
           <Modal
             isOpen={this.state.editModal}
             toggleDelete={this.toggleEdit}
-            className={"modal-info "}
+            className={'modal-info '}
           >
             <ModalHeader>Edit</ModalHeader>
             <ModalBody>
@@ -362,7 +360,7 @@ class Skills extends Component {
                   required
                   disabled
                   value={
-                    this.state.currentItem ? this.state.currentItem._id : ""
+                    this.state.currentItem ? this.state.currentItem._id : ''
                   }
                   className="mb-2"
                   onChange={this.onChangeHandler}
@@ -390,7 +388,7 @@ class Skills extends Component {
           <Modal
             isOpen={this.state.deleteModal}
             toggleDelete={this.toggleDelete}
-            className={"modal-danger "}
+            className={'modal-danger '}
           >
             <ModalHeader>Delete</ModalHeader>
             <ModalBody>
@@ -399,7 +397,7 @@ class Skills extends Component {
             <ModalFooter>
               <Button color="danger" onClick={this.onDelete}>
                 Confirm
-              </Button>{" "}
+              </Button>{' '}
               <Button color="secondary" onClick={this.toggleDelete}>
                 Cancel
               </Button>

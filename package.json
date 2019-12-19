@@ -11,19 +11,24 @@
     "@coreui/react": "^2.5.1",
     "@material-ui/core": "^4.0.0-rc.0",
     "antd": "^3.26.3",
+    "babel-plugin-import": "^1.13.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "classnames": "^2.2.6",
     "core-js": "^3.1.4",
+    "customize-cra": "^0.9.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "flag-icon-css": "^3.3.0",
     "font-awesome": "^4.7.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
     "material-table": "^1.54.1",
     "mdbreact": "^4.23.1",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-app-rewired": "^2.1.5",
     "react-chartjs-2": "^2.7.6",
     "react-dom": "^16.8.6",
     "react-loading-overlay": "^1.0.1",
@@ -36,9 +41,9 @@
     "simple-line-icons": "^2.4.1"
   },
   "scripts": {
-    "start": "set PORT=3006 && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
@@ -54,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "ip": "^1.1.5"
   }
 }

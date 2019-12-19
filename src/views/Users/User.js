@@ -214,19 +214,14 @@ class User extends Component {
                       <Table responsive bordered hover>
                         <tbody>
                           {details.map(([key, value]) => {
-                            if (
-                              key !== '_id' &&
-                              key !== 'googleProvider' &&
-                              key !== 'facebookProvider'
-                            )
-                              return (
-                                <tr key={key}>
-                                  <td>{`${key}:`}</td>
-                                  <td>
-                                    <strong>{value}</strong>
-                                  </td>
-                                </tr>
-                              );
+                            return (
+                              <tr key={key}>
+                                <td>{`${key}:`}</td>
+                                <td>
+                                  <strong>{value}</strong>
+                                </td>
+                              </tr>
+                            );
                           })}
                         </tbody>
                       </Table>
