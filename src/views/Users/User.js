@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Badge, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Badge, Button } from 'antd';
 import LoadingOverlay from 'react-loading-overlay';
 
 class User extends Component {
@@ -41,7 +42,7 @@ class User extends Component {
           />
         );
         user.status = (
-          <Badge color={this.getBadge(user.status)}>{user.status}</Badge>
+          <Badge status={this.getBadge(user.status)} text={user.status}></Badge>
         );
         user.date = new Date(user.date).toLocaleString();
         user.address = Object.values(user.address).join(', ');
@@ -57,11 +58,9 @@ class User extends Component {
     return status === 'active'
       ? 'success'
       : status === 'inactive'
-      ? 'secondary'
-      : status === 'pending'
-      ? 'warning'
+      ? 'default'
       : status === 'banned'
-      ? 'danger'
+      ? 'error'
       : 'primary';
   };
 
@@ -123,7 +122,7 @@ class User extends Component {
 
       const data = await this.handleResponse(response);
       let user = this.state.user;
-      user.status = <Badge color={this.getBadge(data)}>{data}</Badge>;
+      user.status = <Badge status={this.getBadge(data)} text={data}></Badge>;
 
       this.setState({ loading: false, user, banAction: !this.state.banAction });
     } catch (err) {
@@ -226,15 +225,12 @@ class User extends Component {
                         </tbody>
                       </Table>
                       <Row className="justify-content-end mr-2">
-                        <button
+                        <Button
                           onClick={() => this.banUserAction()}
-                          type="button"
-                          className={`btn ${
-                            this.state.banAction ? 'btn-success' : 'btn-danger'
-                          }`}
+                          type={this.state.banAction ? 'primary' : 'danger'}
                         >
                           {this.state.banAction ? 'Unban' : 'Ban'}
-                        </button>
+                        </Button>
                       </Row>
                     </Col>
                   </Row>

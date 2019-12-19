@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import LoadingOverlay from 'react-loading-overlay';
 import { MDBDataTable, MDBTable } from 'mdbreact';
+import { Button } from 'antd';
 import {
   Card,
   CardBody,
   CardHeader,
   Col,
-  Button,
   Row,
   Badge,
   Modal,
@@ -64,11 +64,11 @@ class Skills extends Component {
           <Button
             className="mr-2"
             onClick={() => this.toggleEditItem(element)}
-            color="info"
+            type="primary"
           >
             Edit
           </Button>
-          <Button onClick={() => this.toggleDeleteItem(element)} color="danger">
+          <Button onClick={() => this.toggleDeleteItem(element)} type="danger">
             Delete
           </Button>
         </div>
@@ -271,11 +271,15 @@ class Skills extends Component {
                 <CardBody>
                   <Button
                     onClick={this.toggleAdd}
-                    color="success"
+                    type="primary"
                     className="mb-3 float-right"
-                  >
-                    New
-                  </Button>
+                    icon="plus-circle"
+                    size="large"
+                    style={{
+                      backgroundColor: '#00d77d',
+                      borderColor: '#00d77d'
+                    }}
+                  ></Button>
 
                   <MDBDataTable
                     responsive

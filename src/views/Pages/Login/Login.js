@@ -59,7 +59,7 @@ class Login extends Component {
     };
     try {
       const response = await fetch(
-        `https://cors-anywhere.herokuapp.com/http://admin-api-tutor.herokuapp.com/user/admin-login`,
+        `https://admin-api-tutor.herokuapp.com/user/admin-login`,
         requestOptions
       );
 
@@ -68,6 +68,8 @@ class Login extends Component {
       if (userData.token) {
         // localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem('token', JSON.stringify(userData.token));
+        const role = userData.user.role;
+        localStorage.setItem('role', role);
         this.props.history.push('/');
       }
 

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { MDBDataTable } from 'mdbreact';
-import { Badge, Card, CardBody, CardHeader, Col } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col } from 'reactstrap';
 import LoadingOverlay from 'react-loading-overlay';
-import { Radio, Row, Typography } from 'antd';
+import { Radio, Row, Typography, Button, Badge } from 'antd';
 
 const { Text } = Typography;
 
@@ -70,11 +70,9 @@ class Users extends Component {
     return status === 'active'
       ? 'success'
       : status === 'inactive'
-      ? 'secondary'
-      : status === 'pending'
-      ? 'warning'
+      ? 'default'
       : status === 'banned'
-      ? 'danger'
+      ? 'error'
       : 'primary';
   };
 
@@ -113,17 +111,18 @@ class Users extends Component {
         element._id = index + 1;
         element.status = (
           <Link to={userLink}>
-            <Badge color={this.getBadge(element.status)}>
-              {element.status}
-            </Badge>
+            <Badge
+              status={this.getBadge(element.status)}
+              text={element.status}
+            ></Badge>
           </Link>
         );
         element.date = date.toLocaleString();
         element.actions = (
           <div>
-            <Link className="btn btn-info" to={userLink}>
-              View
-            </Link>
+            <Button type="primary" to={userLink}>
+              <Link to={userLink}>View</Link>
+            </Button>
           </div>
         );
       });
@@ -190,33 +189,33 @@ class Users extends Component {
                   <i className="fa fa-align-justify"></i>Users{'  '}
                   <small className="text-muted">user database</small>
                 </CardHeader>
-                <Row className="mt-4 mr-4" type="flex" justify="end">
-                  <Radio.Group
-                    defaultValue="a"
-                    size="small"
-                    buttonStyle="solid"
-                    onChange={e => this.onChangeRoleFilter(e)}
-                    value={this.state.roleFilter}
-                    className="mr-4"
-                  >
-                    <Radio.Button value="all">All</Radio.Button>
-                    <Radio.Button value="student">Student</Radio.Button>
-                    <Radio.Button value="tutor">Tutor</Radio.Button>
-                  </Radio.Group>
-                  <Radio.Group
-                    defaultValue="a"
-                    size="small"
-                    buttonStyle="solid"
-                    onChange={e => this.onChangeStatusFilter(e)}
-                    value={this.state.statusFilter}
-                  >
-                    <Radio.Button value="all">All</Radio.Button>
-                    <Radio.Button value="active">Active</Radio.Button>
-                    <Radio.Button value="inactive">Inactive</Radio.Button>
-                    <Radio.Button value="banned">Banned</Radio.Button>
-                  </Radio.Group>
-                </Row>
                 <CardBody>
+                  <Row className="mt-2" type="flex" justify="end">
+                    <Radio.Group
+                      defaultValue="a"
+                      size="small"
+                      buttonStyle="solid"
+                      onChange={e => this.onChangeRoleFilter(e)}
+                      value={this.state.roleFilter}
+                      className="mr-4"
+                    >
+                      <Radio.Button value="all">All</Radio.Button>
+                      <Radio.Button value="student">Student</Radio.Button>
+                      <Radio.Button value="tutor">Tutor</Radio.Button>
+                    </Radio.Group>
+                    <Radio.Group
+                      defaultValue="a"
+                      size="small"
+                      buttonStyle="solid"
+                      onChange={e => this.onChangeStatusFilter(e)}
+                      value={this.state.statusFilter}
+                    >
+                      <Radio.Button value="all">All</Radio.Button>
+                      <Radio.Button value="active">Active</Radio.Button>
+                      <Radio.Button value="inactive">Inactive</Radio.Button>
+                      <Radio.Button value="banned">Banned</Radio.Button>
+                    </Radio.Group>
+                  </Row>
                   <MDBDataTable
                     responsive
                     hover

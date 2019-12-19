@@ -23,7 +23,7 @@ class DefaultLayout extends Component {
     };
   }
 
-  componentDidMount = async () => {
+  componentWillMount = async () => {
     // const token = localStorage.removeItem("token");
     const token = JSON.parse(localStorage.getItem('token'));
 
@@ -34,10 +34,10 @@ class DefaultLayout extends Component {
     }
   };
 
-  componentDidUpdate = async () => {
+  componentDidMount = async () => {
     if (this.state.token) {
       const role = await this.getUsers();
-      localStorage.setItem('role', JSON.stringify(role));
+      localStorage.setItem('role', role);
     } else {
       this.props.history.push('/login');
     }
@@ -83,7 +83,7 @@ class DefaultLayout extends Component {
   );
 
   signOut(e) {
-    localStorage.removeItem('token');
+    localStorage.clear();
     this.props.history.push('/login');
   }
 
