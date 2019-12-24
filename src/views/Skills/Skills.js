@@ -21,6 +21,7 @@ class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      token: null,
       deleteModal: false,
       editModal: false,
       addModal: false,
@@ -42,6 +43,17 @@ class Skills extends Component {
     this.onEdit = this.onEdit.bind(this);
     this.onDelete = this.onDelete.bind(this);
   }
+
+  componentWillMount = async () => {
+    // const token = localStorage.removeItem("token");
+    const token = JSON.parse(localStorage.getItem('token'));
+
+    if (token) {
+      this.setState({ token });
+    } else {
+      this.props.history.push('/login');
+    }
+  };
 
   componentDidMount() {
     const token = JSON.parse(localStorage.getItem('token'));
@@ -90,7 +102,7 @@ class Skills extends Component {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI1ZGU1ZTE1YjJkMDY1NjFkNDc2MjA0MmUiLCJyb2xlIjoibWFzdGVyIiwiaWF0IjoxNTc1ODgyNjc1fQ.gRjIyKO6wb0N5QVa5kHuXsWTF7c_GUmNsVkagvNsk2U`
+        Authorization: `Bearer ${this.state.token}`
       }
     };
     try {

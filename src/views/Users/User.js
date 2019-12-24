@@ -7,6 +7,7 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      token: null,
       loading: true,
       banAction: false,
       userData: [],
