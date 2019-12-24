@@ -19,6 +19,7 @@
     "customize-cra": "^0.9.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "firebase": "^7.6.1",
     "flag-icon-css": "^3.3.0",
     "font-awesome": "^4.7.0",
     "less": "^3.10.3",

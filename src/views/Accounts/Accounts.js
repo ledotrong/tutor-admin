@@ -1,29 +1,39 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { MDBDataTable } from 'mdbreact';
-import { Badge, Card, CardBody, CardHeader, Col } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col } from 'reactstrap';
 import LoadingOverlay from 'react-loading-overlay';
-import { Radio, Row, Typography, Button } from 'antd';
+import { Radio, Row, Typography, Button, Tag, Select } from 'antd';
+import AddModal from './AddModal';
+import EditModal from './EditModal';
+import DeleteModal from './DeleteModal';
 
 const { Text } = Typography;
+const { Option } = Select;
 
 class Accounts extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
+      modalVisible: false,
+      editModalVisible: false,
+      deleteModalVisible: false,
+      currentUser: null,
+      role: 'admin',
       userData: [],
+      modal: null,
       roleFilter: 'all',
       columns: [
         {
           label: 'ID',
-          field: '_id',
+          field: 'index',
           sort: 'asc',
           width: 50
         },
         {
           label: 'Picture',
-          field: 'picture',
+          field: 'profile',
           sort: 'asc',
           width: 100
         },
@@ -47,7 +57,7 @@ class Accounts extends Component {
         },
         {
           label: 'Role',
-          field: 'role',
+          field: 'roleTag',
           sort: 'asc',
           width: 100
         },
@@ -106,9 +116,15 @@ class Accounts extends Component {
 
       userData.forEach((element, index) => {
         let date = new Date(element.date);
-        element._id = index + 1;
+        element.index = index + 1;
         element.date = date.toLocaleDateString();
-        element.picture = (
+        element.roleTag =
+          element.role === 'master' ? (
+            <Tag color="magenta">{element.role}</Tag>
+          ) : (
+            <Tag color="geekblue">{element.role}</Tag>
+          );
+        element.profile = (
           <img
             src={element.picture}
             style={{
@@ -124,14 +140,16 @@ class Accounts extends Component {
           <div className="float-right">
             <Button
               className="mr-2"
-              onClick={() => this.toggleEditItem(element)}
+              onClick={() => this.toggleEditModal(element)}
               type="primary"
+              icon="edit"
             >
               Edit
             </Button>
             <Button
-              onClick={() => this.toggleDeleteItem(element)}
+              onClick={() => this.toggleDeleteModal(element)}
               type="danger"
+              icon="delete"
             >
               Delete
             </Button>
@@ -168,6 +186,39 @@ class Accounts extends Component {
     this.getUsers();
   }
 
+  handleCancel = () => {
+    this.setState({
+      modalVisible: false,
+      editModalVisible: false,
+      deleteModalVisible: false
+    });
+  };
+
+  handleSubmit = () => {
+    this.setState({
+      modalVisible: false,
+      editModalVisible: false,
+      deleteModalVisible: false
+    });
+    this.getUsers();
+  };
+
+  toggleModal() {
+    this.setState({ modalVisible: true });
+  }
+
+  toggleEditModal(user) {
+    this.setState({ editModalVisible: true, currentUser: user });
+  }
+
+  toggleDeleteModal(user) {
+    this.setState({ deleteModalVisible: true, currentUser: user });
+  }
+
+  onSubmit() {
+    this.setState({ modalVisible: false });
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -198,6 +249,27 @@ class Accounts extends Component {
                   <small className="text-muted">user database</small>
                 </CardHeader>
                 <CardBody>
+                  <AddModal
+                    handleCancel={this.handleCancel}
+                    handleSubmit={this.handleSubmit}
+                    modalVisible={this.state.modalVisible}
+                  ></AddModal>
+                  {this.state.editModalVisible ? (
+                    <EditModal
+                      handleCancel={this.handleCancel}
+                      handleSubmit={this.handleSubmit}
+                      modalVisible={this.state.editModalVisible}
+                      currentUser={this.state.currentUser}
+                    ></EditModal>
+                  ) : null}
+                  {this.state.deleteModalVisible ? (
+                    <DeleteModal
+                      handleCancel={this.handleCancel}
+                      handleSubmit={this.handleSubmit}
+                      modalVisible={this.state.deleteModalVisible}
+                      currentUser={this.state.currentUser}
+                    ></DeleteModal>
+                  ) : null}
                   <Row className="mt-2" type="flex" justify="end">
                     <Radio.Group
                       defaultValue="a"
@@ -212,14 +284,16 @@ class Accounts extends Component {
                       <Radio.Button value="admin">Admin</Radio.Button>
                     </Radio.Group>
                     <Button
-                      size="large"
                       type="primary"
                       icon="user-add"
                       style={{
                         backgroundColor: '#00d77d',
                         borderColor: '#00d77d'
                       }}
-                    ></Button>
+                      onClick={() => this.toggleModal()}
+                    >
+                      Create
+                    </Button>
                   </Row>
                   <MDBDataTable
                     responsive

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import LoadingOverlay from 'react-loading-overlay';
 import { MDBDataTable, MDBTable } from 'mdbreact';
-import { Button } from 'antd';
 import {
   Card,
   CardBody,
   CardHeader,
   Col,
   Row,
-  Badge,
+  Button,
   Modal,
   ModalBody,
   ModalFooter,
@@ -53,22 +52,32 @@ class Skills extends Component {
   setFormat(skills) {
     skills.forEach((element, index) => {
       element.id = index + 1;
-
-      element.isDeleted = element.isDeleted ? (
-        <Badge color="danger">Deleted</Badge>
-      ) : (
-        <Badge color="success">Available</Badge>
-      );
+      element.isDeleted = undefined;
       element.actions = (
         <div className="float-right">
           <Button
             className="mr-2"
             onClick={() => this.toggleEditItem(element)}
             type="primary"
+            icon="edit"
+            style={{
+              backgroundColor: '#00C5D7',
+              borderColor: '#00C5D7',
+              color: 'white'
+            }}
           >
             Edit
           </Button>
-          <Button onClick={() => this.toggleDeleteItem(element)} type="danger">
+          <Button
+            icon="delete"
+            onClick={() => this.toggleDeleteItem(element)}
+            type="danger"
+            style={{
+              backgroundColor: '#d71200',
+              borderColor: '#d71200',
+              color: 'white'
+            }}
+          >
             Delete
           </Button>
         </div>
@@ -91,6 +100,7 @@ class Skills extends Component {
       );
 
       let skills = await this.handleResponse(response);
+      skills = skills.filter(data => data.isDeleted !== true);
 
       this.setFormat(skills);
 
@@ -123,7 +133,6 @@ class Skills extends Component {
   toggleDeleteItem(item) {
     this.toggleDelete();
     this.setState({ currentItem: item });
-    console.log(item);
   }
 
   toggleEdit() {
@@ -164,25 +173,21 @@ class Skills extends Component {
       let skills = await this.handleResponse(response);
 
       if (skills) {
-        this.setFormat(skills);
+        this.getSkills();
         this.setState({
-          loading: false,
-          skills: skills,
           addModal: false,
           alert: null
         });
-      } else {
-        const alert = <Alert color="danger">Skill already exists</Alert>;
-        this.setState({ alert: alert, loading: false });
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  onEdit = async e => {
+  async onEdit(e) {
     e.preventDefault();
     this.setState({ loading: true });
+    console.log('Update');
     const requestOptions = {
       method: 'PATCH',
       headers: {
@@ -202,13 +207,16 @@ class Skills extends Component {
 
       let skills = await this.handleResponse(response);
       if (skills) {
-        this.setFormat(skills);
-        this.setState({ loading: false, skills, editModal: false });
+        this.getSkills();
+        this.setState({
+          editModal: false,
+          alert: null
+        });
       }
     } catch (err) {
       console.log(err);
     }
-  };
+  }
 
   async onDelete(e) {
     e.preventDefault();
@@ -231,8 +239,11 @@ class Skills extends Component {
 
       let skills = await this.handleResponse(response);
       if (skills) {
-        this.setFormat(skills);
-        this.setState({ loading: false, skills, deleteModal: false });
+        this.getSkills();
+        this.setState({
+          deleteModal: false,
+          alert: null
+        });
       }
     } catch (err) {
       console.log(err);
@@ -274,12 +285,14 @@ class Skills extends Component {
                     type="primary"
                     className="mb-3 float-right"
                     icon="plus-circle"
-                    size="large"
                     style={{
                       backgroundColor: '#00d77d',
-                      borderColor: '#00d77d'
+                      borderColor: '#00d77d',
+                      color: 'white'
                     }}
-                  ></Button>
+                  >
+                    Add
+                  </Button>
 
                   <MDBDataTable
                     responsive
@@ -298,12 +311,6 @@ class Skills extends Component {
                           field: 'name',
                           sort: 'asc',
                           width: 150
-                        },
-                        {
-                          label: 'State',
-                          field: 'isDeleted',
-                          sort: 'asc',
-                          width: 100
                         },
                         {
                           label: 'Actions',
@@ -337,7 +344,12 @@ class Skills extends Component {
                   onChange={this.onChangeHandler}
                 />
                 {this.state.alert}
-                <Button className="float-right" color="success" type="submit">
+                <Button
+                  className="float-right"
+                  color="success"
+                  type="submit"
+                  onSubmit={this.onCreate}
+                >
                   Add
                 </Button>
               </Form>
@@ -378,7 +390,12 @@ class Skills extends Component {
                   className="mb-2"
                   onChange={this.onChangeHandler}
                 />
-                <Button className="float-right" color="info" type="submit">
+                <Button
+                  className="float-right"
+                  color="info"
+                  type="submit"
+                  onSubmit={this.onEdit}
+                >
                   Update
                 </Button>
               </Form>
@@ -396,7 +413,7 @@ class Skills extends Component {
           >
             <ModalHeader>Delete</ModalHeader>
             <ModalBody>
-              Deleted content cannot be recovered. Continue?
+              This skill will be marked as 'deleted'. Do you want to continue?
             </ModalBody>
             <ModalFooter>
               <Button color="danger" onClick={this.onDelete}>

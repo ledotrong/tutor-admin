@@ -68,16 +68,16 @@ class DefaultHeader extends Component {
             </NavItem>
           ) : null}
           <NavItem className="px-3">
-            <Link to="/skills" className="nav-link">
-              <div id="v1" className="nav-button">
-                Skills
+            <Link to="/users" className="nav-link">
+              <div id="v3" className="nav-button">
+                Users
               </div>
             </Link>
           </NavItem>
           <NavItem className="px-3">
-            <Link to="/users" className="nav-link">
-              <div id="v3" className="nav-button">
-                Users
+            <Link to="/skills" className="nav-link">
+              <div id="v1" className="nav-button">
+                Skills
               </div>
             </Link>
           </NavItem>

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, useReducer } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
-import { Badge, Button } from 'antd';
+import { Badge, Button, Descriptions, Tag } from 'antd';
 import LoadingOverlay from 'react-loading-overlay';
 
 class User extends Component {
@@ -21,8 +21,7 @@ class User extends Component {
     const userData = await this.getUsers(token);
     let user = null;
     let banAction = false;
-
-    if (userData) {
+    if (userData.length) {
       user = userData.find(
         user => user._id.toString() === this.props.match.params.id
       );
@@ -46,8 +45,9 @@ class User extends Component {
         );
         user.date = new Date(user.date).toLocaleString();
         user.address = Object.values(user.address).join(', ');
-        user.skills = Object.values(user.skills).join(', ');
-        user.wages = user.wages + ' VND/night';
+        user.skillCount = user.skills.length;
+        // user.skills = Object.values(user.skills).join(', ');
+        user.wages = user.wages ? user.wages + ' VND/hour' : 'not assigned';
       }
 
       this.setState({ user: user, banAction });
@@ -122,6 +122,8 @@ class User extends Component {
 
       const data = await this.handleResponse(response);
       let user = this.state.user;
+      const date = new Date(user.date);
+      user.date = date.toLocaleString();
       user.status = <Badge status={this.getBadge(data)} text={data}></Badge>;
 
       this.setState({ loading: false, user, banAction: !this.state.banAction });
@@ -131,7 +133,29 @@ class User extends Component {
   };
 
   render() {
+    const colors = [
+      'magenta',
+      'cyan',
+      'green',
+      'volcano',
+      'orange',
+      'purple',
+      'lime',
+      'red',
+      'blue',
+      'gold',
+      'geekblue'
+    ];
     let user = this.state.user;
+    let skills = [];
+    if (user) {
+      let count = -1;
+      user.skills.map(item => {
+        const color = colors[++count % colors.length];
+        const skillTag = <Tag color={color}>{item}</Tag>;
+        skills.push(skillTag);
+      });
+    }
     if (!user) {
       user = { id: 'Not found' };
     }
@@ -189,42 +213,47 @@ class User extends Component {
                       <Row className="justify-content-center">
                         {user.picture}
                       </Row>
-                      {/* <Table responsive hover>
-                        <tbody>
-                          {userDetails.map(([key, value]) => {
-                            if (
-                              key !== "_id" &&
-                              key !== "googleProvider" &&
-                              key !== "facebookProvider"
-                            )
-                              return (
-                                <tr key={key}>
-                                  <td>{`${key}:`}</td>
-                                  <td>
-                                    <strong>{value}</strong>
-                                  </td>
-                                </tr>
-                              );
-                          })}
-                        </tbody>
-                      </Table> */}
                     </Col>
                     <Col className="ml-4 mt-4" lg={8}>
-                      <Table responsive bordered hover>
-                        <tbody>
-                          {details.map(([key, value]) => {
-                            return (
-                              <tr key={key}>
-                                <td>{`${key}:`}</td>
-                                <td>
-                                  <strong>{value}</strong>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </Table>
-                      <Row className="justify-content-end mr-2">
+                      <Descriptions
+                        title="User Information"
+                        bordered
+                        column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                      >
+                        <Descriptions.Item label="Role">
+                          {user.role}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Status">
+                          {user.status}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Registered">
+                          {user.date}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Rating">
+                          {user.rate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Skills">
+                          {user.skillCount}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Wages">
+                          {user.wages}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Info">
+                          <strong>Email: </strong>
+                          <br /> <span className="ml-4 mb-2">{user.email}</span>
+                          <br />
+                          <strong>Address: </strong>
+                          <br />{' '}
+                          <span className="ml-4 mb-2">{user.address}</span>
+                          <br /> <strong>Skills: </strong>
+                          <br /> <span className="ml-4 mb-2">{skills}</span>
+                          <br />
+                          <strong>Introduction: </strong>
+                          <br />
+                          <span className="ml-4 mb-2">{user.introduction}</span>
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Row className="justify-content-end mt-4 mr-2">
                         <Button
                           onClick={() => this.banUserAction()}
                           type={this.state.banAction ? 'primary' : 'danger'}
