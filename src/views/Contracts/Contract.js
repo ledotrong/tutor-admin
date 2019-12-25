@@ -3,12 +3,14 @@ import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import { Badge, Button, Descriptions, Tag, Timeline } from 'antd';
 import { Link } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
+import MessageBox from './MessageBox';
 
 class Contract extends Component {
   constructor(props) {
     super(props);
     this.state = {
       token: null,
+      modalVisible: false,
       loading: true,
       banAction: false,
       contractData: [],
@@ -26,18 +28,6 @@ class Contract extends Component {
     const token = JSON.parse(localStorage.getItem('token'));
     if (token) this.setState({ token });
     await this.getContract(token);
-    let student = null;
-    let banAction = false;
-  };
-
-  getBadge = status => {
-    return status === 'active'
-      ? 'success'
-      : status === 'inactive'
-      ? 'default'
-      : status === 'banned'
-      ? 'error'
-      : 'primary';
   };
 
   getContract = async token => {
@@ -56,6 +46,48 @@ class Contract extends Component {
       );
 
       let contractData = await this.handleResponse(response);
+      contractData.student.address = Object.values(
+        contractData.student.address
+      ).join(', ');
+      contractData.tutor.address = Object.values(
+        contractData.tutor.address
+      ).join(', ');
+      contractData.student.picture = (
+        <img
+          src={contractData.student.picture}
+          style={{
+            height: 200,
+            width: 200,
+            objectFit: 'cover',
+            borderRadius: 125
+          }}
+          alt="profile"
+        />
+      );
+      contractData.student.status = (
+        <Badge
+          status={this.getBadge(contractData.student.status)}
+          text={contractData.student.status}
+        ></Badge>
+      );
+      contractData.tutor.picture = (
+        <img
+          src={contractData.tutor.picture}
+          style={{
+            height: 200,
+            width: 200,
+            objectFit: 'cover',
+            borderRadius: 125
+          }}
+          alt="profile"
+        />
+      );
+      contractData.tutor.status = (
+        <Badge
+          status={this.getBadge(contractData.tutor.status)}
+          text={contractData.tutor.status}
+        ></Badge>
+      );
       this.setState({ loading: false, contractData: contractData });
     } catch (err) {
       return err;
@@ -91,12 +123,46 @@ class Contract extends Component {
 
   getBadge2 = status => {
     return status === 'request'
-      ? 'success'
+      ? 'processing'
       : status === 'finished'
       ? 'default'
       : status === 'complain'
       ? 'error'
-      : 'primary';
+      : status === 'refund'
+      ? 'warning'
+      : 'default';
+  };
+
+  showMessages() {
+    this.setState({ modalVisible: true });
+  }
+
+  handleCancel() {
+    this.setState({ modalVisible: false });
+  }
+
+  refundAction = async () => {
+    this.setState({ loading: true });
+    const requestOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.state.token}`
+      }
+    };
+    try {
+      const response = await fetch(
+        `https://cors-anywhere.herokuapp.com/https://admin-api-tutor.herokuapp.com/me/contracts/${this.state.id}/update`,
+        requestOptions
+      );
+
+      const data = await this.handleResponse(response);
+      let contractData = this.state.contractData;
+      contractData.contract.currentStatus = data.status;
+      this.setState({ loading: false, contractData });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {
@@ -136,47 +202,9 @@ class Contract extends Component {
     }
     if (!student) {
       student = { id: 'Not found' };
-    } else {
-      student.address = Object.values(student.address).join(', ');
-      student.picture = (
-        <img
-          src={student.picture}
-          style={{
-            height: 200,
-            width: 200,
-            objectFit: 'cover',
-            borderRadius: 125
-          }}
-          alt="profile"
-        />
-      );
-      student.status = (
-        <Badge
-          status={this.getBadge(student.status)}
-          text={student.status}
-        ></Badge>
-      );
     }
-
     if (!tutor) {
       tutor = { id: 'Not found' };
-    } else {
-      tutor.address = Object.values(tutor.address).join(', ');
-      tutor.picture = (
-        <img
-          src={tutor.picture}
-          style={{
-            height: 200,
-            width: 200,
-            objectFit: 'cover',
-            borderRadius: 125
-          }}
-          alt="profile"
-        />
-      );
-      tutor.status = (
-        <Badge status={this.getBadge(tutor.status)} text={tutor.status}></Badge>
-      );
     }
     if (!contract) {
       contract = { id: 'Not found' };
@@ -220,13 +248,33 @@ class Contract extends Component {
                   <div
                     style={{ border: 'solid 1px grey', paddingBottom: '20px' }}
                   >
+                    <Row className="justify-content-end m-4">
+                      <Button
+                        onClick={() => this.refundAction()}
+                        disabled={
+                          contract.currentStatus === 'complain' ||
+                          contract.currentStatus === 'refund'
+                            ? false
+                            : true
+                        }
+                        type={
+                          contract.currentStatus === 'complain'
+                            ? 'danger'
+                            : 'primary'
+                        }
+                      >
+                        {contract.currentStatus === 'complain'
+                          ? 'Refund'
+                          : 'Undo'}
+                      </Button>
+                    </Row>
                     <Row className="justify-content-center mt-4">
                       <h1 className="text-uppercase font-weight-bold">
                         Contract
                       </h1>
                     </Row>
                     <Row className="justify-content-center mb-4">
-                      <h3 className="">
+                      <h5 className="">
                         status:{' '}
                         {contract ? (
                           <Badge
@@ -234,7 +282,7 @@ class Contract extends Component {
                             text={contract.currentStatus}
                           ></Badge>
                         ) : null}
-                      </h3>
+                      </h5>
                     </Row>
                     <Row className="justify-content-end mb-4">
                       <h4 style={{ paddingRight: '100px' }}>
@@ -247,6 +295,20 @@ class Contract extends Component {
                     >
                       <Col className="mt-4 mb-4 justify-content-center" lg={10}>
                         <Descriptions title="Contract Info">
+                          <Descriptions.Item label="Show">
+                            <Button onClick={() => this.showMessages()}>
+                              Messages
+                            </Button>
+                            {this.state.modalVisible ? (
+                              <MessageBox
+                                messages={this.state.contractData.messages}
+                                visible={this.state.modalVisible}
+                                handleCancel={() => this.handleCancel()}
+                                student={contract.studentID}
+                                tutor={contract.tutorID}
+                              ></MessageBox>
+                            ) : null}
+                          </Descriptions.Item>
                           <Descriptions.Item label="Student">
                             <Link
                               to={
@@ -275,7 +337,12 @@ class Contract extends Component {
                             {contract ? contract.price + ' VND' : null}
                           </Descriptions.Item>
                           <Descriptions.Item label="Status">
-                            {contract ? contract.currentStatus : null}
+                            {contract ? (
+                              <Badge
+                                status={this.getBadge2(contract.currentStatus)}
+                                text={contract.currentStatus}
+                              ></Badge>
+                            ) : null}
                           </Descriptions.Item>
                           <Descriptions.Item label="History">
                             <Timeline>

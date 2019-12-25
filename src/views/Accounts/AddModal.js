@@ -10,7 +10,6 @@ import {
   Icon
 } from 'antd';
 import { storage } from '../../helpers/Firebase';
-import firebase from '../../helpers/Firebase';
 
 const { Option } = Select;
 message.config({
