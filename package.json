@@ -43,7 +43,7 @@
     "viser-react": "^2.4.7"
   },
   "scripts": {
-    "start": "react-app-rewired --max_old_space_size=4096 start",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired --max_old_space_size=4096 build",
     "test": "react-app-rewired test --env=jsdom",
     "predeploy": "npm run build",

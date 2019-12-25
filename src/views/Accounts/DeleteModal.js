@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
-import {
-  message,
-  Upload,
-  Button,
-  Modal,
-  Form,
-  Input,
-  Select,
-  Icon
-} from 'antd';
+import { message, Button, Modal, Form } from 'antd';
 
 class DeleteModal extends Component {
   constructor(props) {

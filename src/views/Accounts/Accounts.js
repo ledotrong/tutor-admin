@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { MDBDataTable } from 'mdbreact';
 import { Card, CardBody, CardHeader, Col } from 'reactstrap';
 import LoadingOverlay from 'react-loading-overlay';

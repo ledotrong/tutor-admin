@@ -1,5 +1,5 @@
-import React, { Component, useReducer } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import React, { Component } from 'react';
+import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { Badge, Button, Descriptions, Tag, Timeline } from 'antd';
 import { Link } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';

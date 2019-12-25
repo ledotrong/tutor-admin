@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { MDBDataTable } from 'mdbreact';
-import { CardBody, CardHeader, Col } from 'reactstrap';
+import { Col } from 'reactstrap';
 import LoadingOverlay from 'react-loading-overlay';
 import { Card, Row, Typography, Radio, Statistic, Select } from 'antd';
 import {
