@@ -106,7 +106,6 @@ class EditModal extends Component {
 
   async onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
     this.setState({ loading: true });
 
     const { imageFile } = this.state;

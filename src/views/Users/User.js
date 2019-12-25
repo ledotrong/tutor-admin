@@ -199,7 +199,7 @@ class User extends Component {
               <Card>
                 <CardHeader className="bg-dark">
                   <strong>
-                    <i className="icon-info pr-1"></i>User id:{' '}
+                    <i className="icon-info pr-1"></i>User ID:{' '}
                     {this.props.match.params.id}
                   </strong>
                 </CardHeader>

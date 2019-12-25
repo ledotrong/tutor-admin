@@ -257,8 +257,8 @@ class Accounts extends Component {
             <Col xl={12}>
               <Card>
                 <CardHeader className="bg-dark">
-                  <i className="fa fa-align-justify"></i>Users{'  '}
-                  <small className="text-muted">user database</small>
+                  <i className="fa fa-align-justify"></i>Accounts{'  '}
+                  <small className="text-muted">staff accounts</small>
                 </CardHeader>
                 <CardBody>
                   <AddModal

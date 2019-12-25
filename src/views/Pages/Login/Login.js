@@ -70,6 +70,8 @@ class Login extends Component {
         localStorage.setItem('token', JSON.stringify(userData.token));
         const role = userData.user.role;
         localStorage.setItem('role', role);
+        const user = userData.user;
+        localStorage.setItem('user', JSON.stringify(user));
         this.props.history.push('/');
       }
 

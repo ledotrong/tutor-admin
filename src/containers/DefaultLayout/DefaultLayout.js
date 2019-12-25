@@ -112,7 +112,6 @@ class DefaultLayout extends Component {
                       />
                     ) : null;
                   })}
-                  <Redirect from="/" to="/users" />
                 </Switch>
               </Suspense>
             </Container>
