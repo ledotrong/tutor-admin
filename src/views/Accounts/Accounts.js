@@ -7,9 +7,6 @@ import AddModal from './AddModal';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
 
-const { Text } = Typography;
-const { Option } = Select;
-
 class Accounts extends Component {
   constructor(props) {
     super(props);

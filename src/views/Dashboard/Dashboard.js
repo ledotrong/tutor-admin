@@ -12,10 +12,6 @@ import {
   Sector,
   Coord
 } from 'viser-react';
-
-const { Text } = Typography;
-const { Option } = Select;
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);

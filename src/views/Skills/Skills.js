@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoadingOverlay from 'react-loading-overlay';
-import { MDBDataTable, MDBTable } from 'mdbreact';
+import { MDBDataTable } from 'mdbreact';
 import {
   Card,
   CardBody,
@@ -13,7 +13,6 @@ import {
   ModalFooter,
   ModalHeader,
   Input,
-  Alert,
   Form
 } from 'reactstrap';
 

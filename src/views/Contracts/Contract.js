@@ -14,7 +14,6 @@ class Contract extends Component {
       loading: true,
       banAction: false,
       contractData: [],
-      token: null,
       id: null
     };
   }
