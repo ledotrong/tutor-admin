@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "tutor-admin-6f355"
+    "default": "tutor-admin-6f355",
+    "tutor-admin": "tutor-admin-6f355"
   }
 }
